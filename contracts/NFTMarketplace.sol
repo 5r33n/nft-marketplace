@@ -70,9 +70,9 @@ contract NFTMarketplace is ERC721URIStorage {
 
     function createListedToken(uint256 tokenId, uint256 price) private {
         // checking ETH sufficiency
-        if (msg.value == listPrice) return NFTMP__InsufficientPrice();
+        if (msg.value == listPrice) revert NFTMP__InsufficientPrice();
         // sanity check
-        if (price <= 0) return NFTMP__NegativePrice();
+        if (price <= 0) revert NFTMP__NegativePrice();
 
         // update the mapping of tokenIds to token details; for retrieval functions
         idToListedToken[tokenId] = ListedToken(
@@ -145,7 +145,7 @@ contract NFTMarketplace is ERC721URIStorage {
     function executeSale(uint256 tokenId) public payable {
         uint price = idToListedToken[tokenId].price;
         address seller = idToListedToken[tokenId].seller;
-        if (msg.value != price) return NFTMP__InsufficientAskingPrice();
+        if (msg.value != price) revert NFTMP__InsufficientAskingPrice();
 
         // update token details
         idToListedToken[tokenId].currentlyListed = true;
@@ -166,7 +166,7 @@ contract NFTMarketplace is ERC721URIStorage {
     /* Helper Functions */
 
     function updateListPrice(uint256 _listPrice) public payable {
-        if (owner != msg.sender) return NFTMP__NotOwner();
+        if (owner != msg.sender) revert NFTMP__NotOwner();
         listPrice = _listPrice;
     }
 
