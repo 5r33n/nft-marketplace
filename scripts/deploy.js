@@ -15,7 +15,6 @@ async function main() {
     abi: JSON.parse(marketplace.interface.format("json")),
   }
 
-  //This writes the ABI and address to the mktplace.json
   fs.writeFileSync("./src/Marketplace.json", JSON.stringify(data))
 }
 
